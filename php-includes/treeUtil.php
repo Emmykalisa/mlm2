@@ -1,0 +1,100 @@
+<?php
+
+require_once 'constants.php';
+    class AmountCalculator
+    {
+        private $conn;
+        private $leftCount;
+        private $rightCount;
+
+        public function __construct($leftCount, $rightCount)
+        {
+            require_once 'connect.php';
+            global $con;
+            $this->conn = $con;
+            $this->leftCount = $leftCount;
+            $this->rightCount = $rightCount;
+        }
+
+        public function getCount($side)
+        {
+            return 'left' == $side ? $this->leftCount : $this->rightCount;
+        }
+
+        public function matchUsers()
+        {
+            $match = 0;
+            if ($this->leftCount || $this->rightCount) {
+                if ($this->leftCount < $this->rightCount) {
+                    $match = $this->leftCount;
+                } elseif ($this->leftCount > $this->rightCount) {
+                    $match = $this->rightCount;
+                } elseif ($this->leftCount == $this->rightCount) {
+                    $match = $this->leftCount = $this->rightCount;
+                }
+            }
+
+            return $match;
+        }
+
+        public function getIndirectProfit()
+        {
+            $leftIndirect = $this->indirectMarks($this->leftCount);
+            $rightIndirect = $this->indirectMarks($this->rightCount);
+
+            return $leftIndirect + $rightIndirect;
+        }
+
+        public function getGiftCheck()
+        {
+            $match = $this->matchUsers();
+
+            return intdiv($match, 5);
+        }
+
+        public function getLRPoints()
+        {
+            $points = 0;
+            if ($this->leftCount && $this->rightCount) {
+                $points = 2;
+            } elseif ($this->leftCount || $this->rightCount) {
+                $points = 1;
+            }
+
+            return $points;
+        }
+
+        public function getTotalPoints()
+        {
+            $match = $this->matchUsers() * QUANTITY_BONUS;
+            $firstPoints = $this->getLRPoints() * SIDE_BONUS;
+            $indirect = $this->getIndirectProfit() * INDIRECT_BONUS;
+            $profit = $this->getGiftCheck() * QUANTITY_BONUS;
+
+            return $match + $indirect - $profit;
+        }
+
+        public function indirectMarks($marks)
+        {
+            $points = 0;
+            if ($marks >= 4 && $marks < 16) {
+                $points = 1;
+            } elseif ($marks >= 16 && $marks < 64) {
+                $points = 2;
+            } elseif ($marks >= 64) {
+                $points = 2;
+            }
+
+            return $points;
+        }
+    }
+
+    // For testing the tree functionality, Uncomment these lines
+
+    // $calculator = new AmountCalculator(6, 3);
+    // echo '<br/>Left side: '.$calculator->getCount('left').'<br/>';
+    // echo 'Right side: '.$calculator->getCount('right').'<br/>';
+    // echo 'Your matching: '.$calculator->matchUsers().'<br/>';
+    // echo 'Your indirect profit: '.$calculator->getIndirectProfit().'<br/>';
+    // echo 'Your gift check: '.$calculator->getGiftCheck().'<br/>';
+    // echo 'Total marks: '.$calculator->getTotalPoints();
