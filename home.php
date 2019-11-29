@@ -1,6 +1,8 @@
 <?php
+
 include 'php-includes/check-login.php';
 include 'php-includes/connect.php';
+
 include './php-includes/treeUtil.php';
 include './php-includes/queryHelper.php';
 $userident = $_SESSION['userident'];
@@ -61,6 +63,8 @@ $userident = $_SESSION['userident'];
                     $leftSideCount = $userTree['leftcount'];
                     $rightSideCount = $userTree['rightcount'];
                     $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
+
+                   
                     $totalAmount = $result['total_bal'] + $calculator->getTotalPoints();
                     ?>
                      <div class="col-lg-3">
@@ -102,6 +106,17 @@ $userident = $_SESSION['userident'];
                             </div>
                             <div class="panel-body">
                                 <?php echo $calculator->getGiftCheck(); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Flash out</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php echo $calculator->Flashout(); ?>
                             </div>
                         </div>
                     </div>

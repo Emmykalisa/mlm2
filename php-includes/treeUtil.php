@@ -25,12 +25,16 @@ require_once 'constants.php';
         {
             $match = 0;
             if ($this->leftCount || $this->rightCount) {
+                include 'connect.php';
+                $userident = $_SESSION['userident'];
                 if ($this->leftCount < $this->rightCount) {
                     $match = $this->leftCount;
-                } elseif ($this->leftCount > $this->rightCount) {
+               } elseif ($this->leftCount > $this->rightCount) {
                     $match = $this->rightCount;
+                      
                 } elseif ($this->leftCount == $this->rightCount) {
                     $match = $this->leftCount = $this->rightCount;
+                        
                 }
             }
 
@@ -52,6 +56,13 @@ require_once 'constants.php';
             return intdiv($match, 5);
         }
 
+         public function Flashout()
+        {
+            $match = $this->matchUsers();
+
+            return intdiv($match, 6);
+        }
+        
         public function getLRPoints()
         {
             $points = 0;
