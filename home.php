@@ -110,7 +110,7 @@ $userident = $_SESSION['userident'];
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Flash out</h4>
@@ -119,7 +119,7 @@ $userident = $_SESSION['userident'];
                                 <?php echo $calculator->Flashout(); ?>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-3">
                         <div class="panel panel-success">
                             <div class="panel-heading">
