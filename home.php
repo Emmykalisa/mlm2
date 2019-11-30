@@ -85,7 +85,14 @@ $userident = $_SESSION['userident'];
                                 <h4 class="panel-title">Matching point</h4>
                             </div>
                             <div class="panel-body">
-                                <?php echo $calculator->matchUsers(); ?>
+                                  <?php 
+$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
+while($rows=mysqli_fetch_array($select)){
+    $matches=$rows['matches'];
+    echo $matches;
+}
+
+                                 ?>
                             </div>
                         </div>
                     </div>

@@ -77,12 +77,22 @@ require_once 'constants.php';
 
         public function getTotalPoints()
         {
-            $match = $this->matchUsers() * QUANTITY_BONUS;
+
+            include"connect.php";
+$userident = $_SESSION['userident'];
+$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
+while($rows=mysqli_fetch_array($select)){
+    $matchu=$rows['matches'];
+   
+}
+
+                               
+            $match = $matchu * QUANTITY_BONUS;
             $firstPoints = $this->getLRPoints() * SIDE_BONUS;
             $indirect = $this->getIndirectProfit() * INDIRECT_BONUS;
             $profit = $this->getGiftCheck() * QUANTITY_BONUS;
 
-            return $match + $indirect - $profit;
+            return $match+ $indirect - $profit;
         }
 
         public function indirectMarks($marks)
