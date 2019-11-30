@@ -4,36 +4,36 @@ require_once 'constants.php';
     class AmountCalculator
     {
         private $conn;
-        private $leftCount;
-        private $rightCount;
+        private $leftPoints;
+        private $rightPoints;
 
-        public function __construct($leftCount, $rightCount)
+        public function __construct($leftPoints, $rightPoints)
         {
             require_once 'connect.php';
             global $con;
             $this->conn = $con;
-            $this->leftCount = $leftCount;
-            $this->rightCount = $rightCount;
+            $this->leftPoints = $leftPoints;
+            $this->rightPoints = $rightPoints;
         }
 
         public function getCount($side)
         {
-            return 'left' == $side ? $this->leftCount : $this->rightCount;
+            return 'left' == $side ? $this->leftPoints : $this->rightPoints;
         }
 
         public function matchUsers()
         {
             $match = 0;
-            if ($this->leftCount || $this->rightCount) {
+            if ($this->leftPoints || $this->rightPoints) {
                 include 'connect.php';
                 $userident = $_SESSION['userident'];
-                if ($this->leftCount < $this->rightCount) {
-                    $match = $this->leftCount;
-               } elseif ($this->leftCount > $this->rightCount) {
-                    $match = $this->rightCount;
+                if ($this->leftPoints < $this->rightPoints) {
+                    $match = $this->leftPoints;
+               } elseif ($this->leftPoints > $this->rightPoints) {
+                    $match = $this->rightPoints;
                       
-                } elseif ($this->leftCount == $this->rightCount) {
-                    $match = $this->leftCount = $this->rightCount;
+                } elseif ($this->leftPoints == $this->rightPoints) {
+                    $match = $this->leftPoints = $this->rightPoints;
                         
                 }
             }
@@ -43,8 +43,8 @@ require_once 'constants.php';
 
         public function getIndirectProfit()
         {
-            $leftIndirect = $this->indirectMarks($this->leftCount);
-            $rightIndirect = $this->indirectMarks($this->rightCount);
+            $leftIndirect = $this->indirectMarks($this->leftPoints);
+            $rightIndirect = $this->indirectMarks($this->rightPoints);
 
             return $leftIndirect + $rightIndirect;
         }
@@ -66,9 +66,9 @@ require_once 'constants.php';
         public function getLRPoints()
         {
             $points = 0;
-            if ($this->leftCount && $this->rightCount) {
+            if ($this->leftPoints && $this->rightPoints) {
                 $points = 2;
-            } elseif ($this->leftCount || $this->rightCount) {
+            } elseif ($this->leftPoints || $this->rightPoints) {
                 $points = 1;
             }
 

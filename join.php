@@ -116,7 +116,7 @@ if (isset($_GET['join_user'])) {
         $temp_under_userpin = $under_userpin;
         $temp_side = $side;
         $temp_side_count = $side.'count'; //leftcount or rightcount
-
+        $temp_points_count = $side.'points'; 
         $total_count = 1;
         // $i=1;
 
@@ -127,9 +127,10 @@ if (isset($_GET['join_user'])) {
             $q = mysqli_query($con, "select * from tree where userident='{$temp_under_userpin}'");
             $r = mysqli_fetch_array($q);
             $current_temp_side_count = $r[$temp_side_count] + 1;
+             $current_temp_points_count = $r[$temp_points_count] + 1;
             // $temp_under_userpin;
             // $temp_side_count;
-            mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count},`updated_at`=NOW() where userident='{$temp_under_userpin}'");
+            mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count}, `{$temp_points_count}`={$current_temp_points_count}, `updated_at`=NOW() where userident='{$temp_under_userpin}'");
 ///=============helpers==================================
         //========= Flash out process Zitangirira hano(TT) !=====
 
@@ -138,8 +139,8 @@ if (isset($_GET['join_user'])) {
 
                     $qHelper = new QueryHelper();
                     $userTree = $qHelper->getUserCounts($result['userident']);
-                    $leftSideCount = $userTree['leftcount'];
-                    $rightSideCount = $userTree['rightcount'];
+                    $leftSideCount = $userTree['leftpoints'];
+                    $rightSideCount = $userTree['rightpoints'];
                     $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
 
 
@@ -147,13 +148,13 @@ if (isset($_GET['join_user'])) {
  //============Insertind tree to todays table to easly notify entry date (TT)
             $tree_data = tree($temp_under_userpin);
 
-                $temp_left_count = $tree_data['leftcount'];
-                $temp_right_count = $tree_data['rightcount'];
+                $temp_left_count = $tree_data['leftpoints'];
+                $temp_right_count = $tree_data['rightpoints'];
                 $matched=$calculator->matchUsers();
 $newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount,rightcount) VALUES('$temp_under_userpin','$matched','$date','$temp_left_count','$temp_right_count')");
 
 //===============Update tree - points--- (TT)=======================
- $updta=$dbi->query("UPDATE tree SET leftpoints='$temp_left_count', rightpoints='$temp_right_count' where   userident='{$temp_under_userpin}' ");
+ // $updta=$dbi->query("UPDATE tree SET leftpoints='$temp_left_count', rightpoints='$temp_right_count' where   userident='{$temp_under_userpin}' ");
 
 //=============== left na light ziherukatc (TT)
  $iziheruka =  $dbi->query("SELECT * FROM todays where userpin='{$temp_under_userpin}' AND created_at='$datu' order by id desc limit 1 ");
@@ -180,7 +181,7 @@ $lefthand = $todayleft-$todaymatch;
 
 
  $diff=$todaymatch-$previousmatch;
- if($diff>=6){
+ if($diff>6){
     //===Now Let update our points - as flash out took place
 
 $updatee=$dbi->query("UPDATE tree SET leftpoints='$lefthand',rightpoints=' $righthand' where userident='{$temp_under_userpin}' ");
@@ -197,8 +198,8 @@ $updatee=$dbi->query("UPDATE tree SET leftpoints='$lefthand',rightpoints=' $righ
 
                 $tree_data = tree($temp_under_userpin);
 
-                $temp_left_count = $tree_data['leftcount'];
-                $temp_right_count = $tree_data['rightcount'];
+                $temp_left_count = $tree_data['leftpoints'];
+                $temp_right_count = $tree_data['rightpoints'];
 
                 //change under_userpin
                 $next_under_userpin = getUnderId($temp_under_userpin);
@@ -304,6 +305,8 @@ function tree($userident)
     $data['right'] = $result['right'];
     $data['leftcount'] = $result['leftcount'];
     $data['rightcount'] = $result['rightcount'];
+    $data['leftpoints'] = $result['leftpoints'];
+    $data['rightpoints'] = $result['rightpoints'];
 
     return $data;
 }
