@@ -150,7 +150,7 @@ if (isset($_GET['join_user'])) {
                 $temp_left_count = $tree_data['leftcount'];
                 $temp_right_count = $tree_data['rightcount'];
                 $matched=$calculator->matchUsers();
-$newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount,rightcount,) VALUES('$temp_under_userpin','$matched','$date','$temp_left_count','$temp_right_count')");
+$newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount,rightcount) VALUES('$temp_under_userpin','$matched','$date','$temp_left_count','$temp_right_count')");
 
 //===============Update tree - points--- (TT)=======================
  $updta=$dbi->query("UPDATE tree SET leftpoints='$temp_left_count', rightpoints='$temp_right_count' where   userident='{$temp_under_userpin}' ");
