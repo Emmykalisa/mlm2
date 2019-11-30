@@ -60,8 +60,8 @@ $userident = $_SESSION['userident'];
 
                     $qHelper = new QueryHelper();
                     $userTree = $qHelper->getUserCounts($result['userident']);
-                    $leftSideCount = $userTree['leftpoints'];
-                    $rightSideCount = $userTree['rightpoints'];
+                    $leftSideCount = $userTree['leftcount'];
+                    $rightSideCount = $userTree['rightcount'];
                     $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
 
                    
