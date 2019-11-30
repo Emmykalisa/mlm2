@@ -116,7 +116,7 @@ if (isset($_GET['join_user'])) {
         $temp_under_userpin = $under_userpin;
         $temp_side = $side;
         $temp_side_count = $side.'count'; //leftcount or rightcount
-
+        
         $total_count = 1;
         // $i=1;
 
@@ -129,7 +129,7 @@ if (isset($_GET['join_user'])) {
             $current_temp_side_count = $r[$temp_side_count] + 1;
             // $temp_under_userpin;
             // $temp_side_count;
-            mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count},`updated_at`=NOW() where userident='{$temp_under_userpin}'");
+            mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count}, `updated_at`=NOW() where userident='{$temp_under_userpin}'");
 ///=============helpers==================================
         //========= Flash out process Zitangirira hano(TT) !=====
 
@@ -142,7 +142,9 @@ if (isset($_GET['join_user'])) {
                     $rightSideCount = $userTree['rightcount'];
                     $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
 
+//==============Update points 
 
+                    // $update=$dbi->query("UPDATE tree set leftpoints='$leftSideCount', rightpoints='$rightSideCount' where userident='{$temp_under_userpin}' ");
 
  //============Insertind tree to todays table to easly notify entry date (TT)
             $tree_data = tree($temp_under_userpin);
@@ -169,25 +171,26 @@ $newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount
     
 
  }
-//  //===============Selecting points 
-//  $usertrees=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
-//  while($rows=mysqli_fetch_array($usertrees)){
-//     $todayright=$rows['rightcount'];
-//     $todayleft=$rows['leftcount'];
-//  }
-// $righthand = $todayright-$todaymatch;
-// $lefthand = $todayleft-$todaymatch;
+//===============Selecting points 
+ $usertrees=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
+ while($rows=mysqli_fetch_array($usertrees)){
+    $todayright=$rows['rightcount'];
+    $todayleft=$rows['leftcount'];
+    $matchu=$rows['matches'];
+ }
+$righthand = $todayright-$todaymatch;
+$lefthand = $todayleft-$todaymatch;
 
 
  $diff=$todaymatch-$previousmatch;
  if($diff>6){
     //===Now Let update our points - as flash out took place
-$matches=$previousmatch+6;
-$updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp_under_userpin}' ");
+$matches=$matchu+6;
+$updatee=$dbi->query("UPDATE tree SET matches='$matches',leftview='$todayleft',rightview='$todayright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
 
 
  }else{
-$matches=$previousmatch+$diff;
+$matches=$matchu+$diff;
 $updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp_under_userpin}' ");
 
  }
