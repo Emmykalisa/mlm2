@@ -169,14 +169,14 @@ $newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount
     
 
  }
- //===============Selecting points 
- $usertrees=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
- while($rows=mysqli_fetch_array($usertrees)){
-    $todayright=$rows['rightcount'];
-    $todayleft=$rows['leftcount'];
- }
-$righthand = $todayright-$todaymatch;
-$lefthand = $todayleft-$todaymatch;
+//  //===============Selecting points 
+//  $usertrees=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
+//  while($rows=mysqli_fetch_array($usertrees)){
+//     $todayright=$rows['rightcount'];
+//     $todayleft=$rows['leftcount'];
+//  }
+// $righthand = $todayright-$todaymatch;
+// $lefthand = $todayleft-$todaymatch;
 
 
  $diff=$todaymatch-$previousmatch;
