@@ -93,7 +93,7 @@ if (isset($_GET['join_user'])) {
     //Now we will save all the information
     if (1 == $flag) {
         //Insert into User profile
-        $query = mysqli_query($con, "insert into user(`userident`,`Names`,`NationalID`,`password`,`mobile`,`address`,`under_userpin`,`side`,`user_status`,`picture`,`created_at`) values('{$pin}','{$names}','{$natio_id}','{$password}','{$mobile}','{$address}','{$under_userpin}','{$side}','{$user_status}','{$picture}','{$date}')");
+        $query = mysqli_query($con, "insert into user(`userident`,`Names`,`NationalID`,`password`,`mobile`,`address`,`under_userpin`,`side`,`user_status`,`picture`) values('{$pin}','{$names}','{$natio_id}','{$password}','{$mobile}','{$address}','{$under_userpin}','{$side}','{$user_status}','{$picture}')");
 
         //Insert into Tree
         //So that later on we can view tree.
@@ -101,7 +101,7 @@ if (isset($_GET['join_user'])) {
 
         //Insert to side
         $query = mysqli_query($con, "update tree set `{$side}`='{$pin}',`updated_at`=NOW() where userident='{$under_userpin}'");
-       
+
         //Update pin status to close
         $query = mysqli_query($con, "update pin_list set status='close',`updated_at`=NOW() where pin='{$pin}'");
 
@@ -116,7 +116,7 @@ if (isset($_GET['join_user'])) {
         $temp_under_userpin = $under_userpin;
         $temp_side = $side;
         $temp_side_count = $side.'count'; //leftcount or rightcount
-        
+
         $total_count = 1;
         // $i=1;
 
@@ -129,7 +129,7 @@ if (isset($_GET['join_user'])) {
             $current_temp_side_count = $r[$temp_side_count] + 1;
             // $temp_under_userpin;
             // $temp_side_count;
-            mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count}, `updated_at`=NOW() where userident='{$temp_under_userpin}'");
+            mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count},`updated_at`=NOW() where userident='{$temp_under_userpin}'");
 ///=============helpers==================================
         //========= Flash out process Zitangirira hano(TT) !=====
 
@@ -152,7 +152,16 @@ if (isset($_GET['join_user'])) {
                 $temp_left_count = $tree_data['leftcount'];
                 $temp_right_count = $tree_data['rightcount'];
                 $matched=$calculator->matchUsers();
-$newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount,rightcount) VALUES('$temp_under_userpin','$matched','$date','$temp_left_count','$temp_right_count')");
+//select matchedview to this 
+ $usertri=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
+ while($rows=mysqli_fetch_array($usertri)){
+   
+    $matchi=$rows['matchedview'];
+ }               
+
+$fmatch=$matched+$matchi;
+
+$newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount,rightcount,flashoutmatch) VALUES('$temp_under_userpin','$matched','$date','$temp_left_count','$temp_right_count','$fmatch')");
 
 //===============Update tree - points--- (TT)=======================
  // $updta=$dbi->query("UPDATE tree SET leftpoints='$temp_left_count', rightpoints='$temp_right_count' where   userident='{$temp_under_userpin}' ");
@@ -177,19 +186,21 @@ $newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount
     $todayright=$rows['rightcount'];
     $todayleft=$rows['leftcount'];
     $matchu=$rows['matches'];
+    $fmatchu=$rows['matchedview'];
  }
 $righthand = $todayright-$todaymatch;
 $lefthand = $todayleft-$todaymatch;
 
 
- $diff=$todaymatch-$previousmatch;
+ $diff=$todaymatch+$fmatchu-$previousmatch;
  if($diff>6){
     //===Now Let update our points - as flash out took place
-$matches=$matchu+6;
-$updatee=$dbi->query("UPDATE tree SET matches='$matches',leftview='$todayleft',rightview='$todayright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
+$matches=$previousmatch+6;
+$updatee=$dbi->query("UPDATE tree SET matches='$matches',matchedview='$matches',leftview='$todayleft',rightview='$todayright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
 
 
  }else{
+    
 $matches=$matchu+$diff;
 $updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp_under_userpin}' ");
 
@@ -251,7 +262,6 @@ $updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp
     }
 }
 ?>
-<!--/join user-->
 <?php
 //functions
 function pin_check($pin)

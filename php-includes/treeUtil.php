@@ -25,8 +25,7 @@ require_once 'constants.php';
         {
             $match = 0;
             if ($this->leftCount || $this->rightCount) {
-                include 'connect.php';
-                $userident = $_SESSION['userident'];
+               
                 if ($this->leftCount < $this->rightCount) {
                     $match = $this->leftCount;
                } elseif ($this->leftCount > $this->rightCount) {
@@ -74,6 +73,7 @@ require_once 'constants.php';
 
             return $points;
         }
+
 
         public function getTotalPoints()
         {
