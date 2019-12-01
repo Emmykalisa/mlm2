@@ -14,6 +14,7 @@ require_once 'constants.php';
             $this->conn = $con;
             $this->leftCount = $leftCount;
             $this->rightCount = $rightCount;
+
         }
 
         public function getCount($side)
@@ -42,15 +43,36 @@ require_once 'constants.php';
 
         public function getIndirectProfit()
         {
-            $leftIndirect = $this->indirectMarks($this->leftCount);
-            $rightIndirect = $this->indirectMarks($this->rightCount);
 
+             include"connect.php";
+$userident = $_SESSION['userident'];
+$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
+while($rows=mysqli_fetch_array($select)){
+     $rightview=$rows['matchedview'];
+
+     $leftview=$rows['matchedview'];
+
+   
+}
+            $leftIndirect = $this->indirectMarks($this->leftCount+$leftview);
+            $rightIndirect = $this->indirectMarks($this->rightCount+$rightview);
             return $leftIndirect + $rightIndirect;
         }
 
         public function getGiftCheck()
         {
-            $match = $this->matchUsers();
+
+             include"connect.php";
+$userident = $_SESSION['userident'];
+$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
+while($rows=mysqli_fetch_array($select)){
+     $matchi=$rows['matchedview'];
+
+     
+   
+}
+            $matchu = $this->matchUsers();
+            $match=$matchu+$matchi;
 
             return intdiv($match, 5);
         }
