@@ -83,11 +83,14 @@ $userident = $_SESSION['userident'];
 $select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
 while($rows=mysqli_fetch_array($select)){
     $matchu=$rows['matches'];
+     $matchi=$rows['matchedview'];
+
+     $matcho=$matchu+$matchi;
    
 }
 
                                
-            $match = $matchu * QUANTITY_BONUS;
+            $match = $matcho * QUANTITY_BONUS;
             $firstPoints = $this->getLRPoints() * SIDE_BONUS;
             $indirect = $this->getIndirectProfit() * INDIRECT_BONUS;
             $profit = $this->getGiftCheck() * QUANTITY_BONUS;

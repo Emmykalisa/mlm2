@@ -205,7 +205,7 @@ $updatee=$dbi->query("UPDATE tree SET matches='$matches',matchedview='$matches',
 
  }else{
      
-$matches=$todaymatch+$fmatchu;
+$matches=$todaymatch;
 $updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp_under_userpin}' ");
 
  }

@@ -88,7 +88,7 @@ $userident = $_SESSION['userident'];
                                   <?php 
 $select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
 while($rows=mysqli_fetch_array($select)){
-    $matches=$rows['matches'];
+    $matches=$rows['matches']+$rows['matchedview'];
     echo $matches;
 }
 
