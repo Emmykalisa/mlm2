@@ -185,6 +185,8 @@ $newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount
  while($rows=mysqli_fetch_array($usertrees)){
     $todayright=$rows['rightcount'];
     $todayleft=$rows['leftcount'];
+    $rview=$rows['rightview'];
+    $lview=$rows['leftview'];
     $matchu=$rows['matches'];
     $fmatchu=$rows['matchedview'];
  }
@@ -196,12 +198,14 @@ $lefthand = $todayleft-$todaymatch;
  if($diff>6){
     //===Now Let update our points - as flash out took place
 $matches=$previousmatch+6;
-$updatee=$dbi->query("UPDATE tree SET matches='$matches',matchedview='$matches',leftview='$todayleft',rightview='$todayright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
+$totright =$todayright+ $rview;
+$totleft =$todayleft+ $lview;
+$updatee=$dbi->query("UPDATE tree SET matches='$matches',matchedview='$matches',leftview='$totleft',rightview='$totright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
 
 
  }else{
-    
-$matches=$matchu+$diff;
+     
+$matches=$todaymatch+$fmatchu;
 $updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp_under_userpin}' ");
 
  }
