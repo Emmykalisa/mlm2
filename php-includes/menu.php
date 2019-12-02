@@ -60,6 +60,10 @@ $result = mysqli_fetch_array($query);
                             <a href="payment-received-history.php"><i class="fa fa-adjust fa-hub"></i>Payment Received History</a>
                         </li>
 
+                        <li>
+                            <a href="withdraw.php"><i class="fa fa-adjust fa-hub"></i>Request Withdraw</a>
+                        </li>
+
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

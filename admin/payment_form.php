@@ -4,55 +4,7 @@ require_once 'php-includes/connect.php';
 include '../php-includes/treeUtil.php';
 include '../php-includes/queryHelper.php';
 $userident = $_SESSION['userident'];
-
-if (!isset($_SESSION['id'])) {
-    header('Location:../index.php');
-}
-$id = $_GET['payment_id'];
-
-$result = mysqli_query($con, "SELECT * FROM user, income where income.userident='".$_GET['payment_id']."'");
-$row = mysqli_fetch_array($result);
-
-$qHelper = new QueryHelper();
-$userTree = $qHelper->getUserCounts($id);
-$leftSideCount = $userTree['leftcount'];
-$rightSideCount = $userTree['rightcount'];
-$calculator = new AmountCalculator($leftSideCount, $rightSideCount);
-$totalAmount = $row['total_bal'] + $calculator->getTotalPoints();
-if (isset($_POST['btn_save_updates'])) {
-    //getting the text data from the fields
-
-    $total_bal = $_POST['total_bal'];
-    $total_payment = $_POST['total_payment'];
-    $paid_amount = $_POST['paid_amount'];
-    if ($paid_amount <= $totalAmount) {
-        $new_total_bal = $row['total_bal'] - $paid_amount;
-        $new_paid_bal = $total_payment + $paid_amount;
-        $tax = (($paid_amount * 18) / 100);
-        $amout_to_take = ($paid_amount - $tax) - 1000;
-
-        $update = "update income set total_bal='{$new_total_bal}', total_payment='{$new_paid_bal}',`updated_at`=NOW() where userident='{$id}'";
-        $query = mysqli_query($con, "insert into payment_record (`userident`,`Names`,`NationalID`,`mobile`,`amount`,`after_charges`) values('{$id}','{$row['Names']}','{$row['NationalID']}','{$row['mobile']}','{$paid_amount}','{$amout_to_take}')");
-        $run = mysqli_query($con, $update);
-        if ($run) {
-            ?>
-            <script>
-                alert('Collect : <?php echo $amout_to_take; ?>  of <?php echo $paid_amount; ?> after charges');
-                window.location.href = 'payment.php';
-            </script>
-            <?php
-        } else {
-            echo "<script>alert('There is something wrong!')</script>";
-        }
-    } else {
-            ?>
-                <script>
-                alert('You do not have those amount !...');
-                window.location.href = 'payment_form.php?payment_id={$id}';
-                </script>
-            <?php
-    }
-}
+$id = $_GET['id'];
 
 ?>
 
@@ -117,45 +69,84 @@ if (isset($_POST['btn_save_updates'])) {
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <b>Pay </b>
+                            <b>Pay Encashment</b>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <form role="form" method="post" action="">
-                                        <?php
-                                            if (isset($errMSG)) {
-                                                ?>
-                                        <div class="alert alert-danger">
-                                            <span class="glyphicon glyphicon-info-sign"></span> &nbsp;
-                                            <?php echo $errMSG; ?>
-                                        </div>
-                                        <?php
-                                            }
-                                            ?>
-                                        <div class="form-group">
-                                            <label>User Names</label>
-                                            <input class="form-control" name="Names"
-                                                value="<?php echo $row['Names']; ?>" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Total amount he/she can withdrow</label>
-                                            <input class="form-control" name="total_bal"
-                                                value="<?php echo $totalAmount; ?>" readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="total_payment"
-                                                value="<?php echo $row['total_payment']; ?>" style="display: none">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Paid Amount</label>
-                                            <input class="form-control" name="paid_amount">
-                                        </div>
-                                        <button type="submit" name="btn_save_updates" class="btn btn-success"><span
-                                                class="glyphicon glyphicon-floppy-save"></span>&nbsp; Make
-                                            Payment</button>
-                                    </form>
+
+                                      <?php
+
+$ss=$dbi->query("SELECT * FROM withdraw where id='$id' ");
+while($rows=mysqli_fetch_array($ss)){
+    $amount=$rows['amount'];
+    $phone=$rows['telephone'];
+    $trans=$rows['transactionid'];
+    $userid=$rows['transactionid'];
+      $fullname=$rows['fullname'];
+}
+echo"<p>Fullname: $fullname </p>";
+echo"<p>User Identification: $userid </p>";
+echo"<p>Amount: $amount </p>";
+echo"<p>Telephone: $phone </p>";
+   ?>
+                                           <?php
+//User cliced on join
+  // ====================Taliki za none ================
+   $dat = new DateTime('now', new DateTimeZone('Africa/Cairo'));
+
+    $date = $dat->format('Y-m-d');
+
+
+//==============end 
+if (isset($_POST['join_user'])) {
+    
+   // $trid=rand(1000,10000000000);
+
+
+
+
+   $insert = $dbi->query("UPDATE withdraw SET status='yes' where id='{$id}' ");
+
+   if($insert){ 
+
+     echo "<center><p class='alert alert-success'>You have withdrawn $amount RWF <b>$message</b>, $status  </p> </center>";
+    echo"<script>window.setTimeout(function() {
+    window.location.replace('payment.php');
+}, 3000);</script>";
+
+    
+   
+
+
+}else{
+
+    echo"<p class='alert alert-danger'>Sorry , withdraw can not be processed-error</p>";
+}
+}
+
+?>
+
+
+                        <form method="POST">
+                           
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select class="form-control" name="category">
+                                    
+                                    <option value="yes">Withdraw</option>
+                                   >
+                                </select>
+                            </div>
+                            
+                          
+                         
+
+                            <div class="form-group">
+                                <input type="submit" name="join_user" class="btn btn-success" value="Confirm withdraw">
+                            </div>
+                        </form>
                                 </div>
 
                             </div>
