@@ -32,7 +32,7 @@ if (isset($_POST['btn_save_updates'])) {
         $amout_to_take = ($paid_amount - $tax) - 1000;
 
         $update = "update income set total_bal='{$new_total_bal}', total_payment='{$new_paid_bal}',`updated_at`=NOW() where userident='{$id}'";
-        $query = mysqli_query($con, "insert into payment_record (`userident`,`Names`,`NationalID`,`mobile`,`amount`,`after_charges`) values('{$id}','{$row['Names']}','{$row['NationalID']}','{$row['mobile']}','{$paid_amount}','{$amout_to_take}')");
+        // $query = mysqli_query($con, "insert into payment_record (`userident`,`Names`,`NationalID`,`mobile`,`amount`,`after_charges`) values('{$id}','{$row['Names']}','{$row['NationalID']}','{$row['mobile']}','{$paid_amount}','{$amout_to_take}')");
         $run = mysqli_query($con, $update);
         if ($run) {
             ?>

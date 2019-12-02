@@ -62,9 +62,9 @@ $result = mysqli_fetch_array($query);
                         <li>
                             <a href="payment.php"><i class="fa fa-rupee fa-fw"></i> Make Encashment</a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="report.php"><i class="fa fa-rupee fa-fw"></i> Encashment Report</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

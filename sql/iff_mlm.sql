@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 01, 2019 at 09:36 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.4
+-- Generation Time: Dec 01, 2019 at 02:08 PM
+-- Server version: 10.4.8-MariaDB
+-- PHP Version: 7.3.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -38,8 +38,8 @@ CREATE TABLE `accountant` (
   `address` varchar(200) NOT NULL,
   `user_status` varchar(200) NOT NULL,
   `picture` varchar(100) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -54,8 +54,8 @@ CREATE TABLE `admin` (
   `password` varchar(20) NOT NULL,
   `Names` varchar(100) NOT NULL,
   `picture` varchar(100) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -74,12 +74,12 @@ INSERT INTO `admin` (`id`, `userident`, `password`, `Names`, `picture`, `created
 CREATE TABLE `income` (
   `id` int(11) NOT NULL,
   `userident` int(11) DEFAULT NULL,
-  `total_earnings` int(11) DEFAULT '0',
-  `available_balance` int(11) DEFAULT '0',
-  `total_bal` int(11) DEFAULT '0',
-  `total_payment` int(11) NOT NULL DEFAULT '0',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `total_earnings` int(11) DEFAULT 0,
+  `available_balance` int(11) DEFAULT 0,
+  `total_bal` int(11) DEFAULT 0,
+  `total_payment` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -421,7 +421,8 @@ INSERT INTO `income` (`id`, `userident`, `total_earnings`, `available_balance`, 
 (341, 522941, 0, 0, 0, 0, '2019-12-01 10:04:46', '2019-12-01 10:04:46'),
 (342, 697439, 5000, 5000, 5000, 0, '2019-12-01 10:05:51', '2019-12-01 10:32:15'),
 (343, 101472, 0, 0, 0, 0, '2019-12-01 10:08:40', '2019-12-01 10:08:40'),
-(344, 128712, 0, 0, 0, 0, '2019-12-01 10:32:11', '2019-12-01 10:32:11');
+(344, 128712, 5000, 5000, 5000, 0, '2019-12-01 10:32:11', '2019-12-01 13:49:19'),
+(345, 772355, 0, 0, 0, 0, '2019-12-01 13:49:18', '2019-12-01 13:49:18');
 
 -- --------------------------------------------------------
 
@@ -433,8 +434,8 @@ CREATE TABLE `income_received` (
   `id` int(11) NOT NULL,
   `userident` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -455,8 +456,8 @@ CREATE TABLE `pin_list` (
   `userident` int(11) DEFAULT NULL,
   `pin` int(11) NOT NULL,
   `status` enum('open','close') NOT NULL DEFAULT 'open',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -835,7 +836,7 @@ INSERT INTO `pin_list` (`id`, `userident`, `pin`, `status`, `created_at`, `updat
 (371, 1001, 697439, 'close', '2019-12-01 08:47:08', '2019-12-01 10:05:50'),
 (372, 1001, 101472, 'close', '2019-12-01 08:47:08', '2019-12-01 10:08:40'),
 (373, 1001, 128712, 'close', '2019-12-01 08:47:08', '2019-12-01 10:32:10'),
-(374, 1001, 772355, 'open', '2019-12-01 08:47:09', '2019-12-01 08:47:09'),
+(374, 1001, 772355, 'close', '2019-12-01 08:47:09', '2019-12-01 13:49:18'),
 (375, 1001, 676473, 'open', '2019-12-01 08:47:10', '2019-12-01 08:47:10');
 
 -- --------------------------------------------------------
@@ -848,8 +849,8 @@ CREATE TABLE `pin_request` (
   `id` int(11) NOT NULL,
   `userident` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `status` enum('open','close') NOT NULL DEFAULT 'open'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1189,7 +1190,12 @@ INSERT INTO `todays` (`id`, `userpin`, `created_at`, `leftcount`, `rightcount`, 
 (274, 697439, '2019-12-01', 1, 0, 0, 0),
 (275, 665355, '2019-12-01', 1, 2, 1, 1),
 (276, 431635, '2019-12-01', 3, 4, 3, 3),
-(277, 1001, '2019-12-01', 1, 1, 1, 7);
+(277, 1001, '2019-12-01', 1, 1, 1, 7),
+(278, 128712, '2019-12-01', 0, 1, 0, 0),
+(279, 697439, '2019-12-01', 2, 0, 0, 0),
+(280, 665355, '2019-12-01', 1, 3, 1, 1),
+(281, 431635, '2019-12-01', 3, 5, 3, 3),
+(282, 1001, '2019-12-01', 8, 9, 8, 14);
 
 -- --------------------------------------------------------
 
@@ -1203,10 +1209,10 @@ CREATE TABLE `tree` (
   `Names` varchar(50) NOT NULL,
   `left` varchar(50) DEFAULT '',
   `right` varchar(50) DEFAULT '',
-  `leftcount` int(11) DEFAULT '0',
-  `rightcount` int(11) DEFAULT '0',
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `leftcount` int(11) DEFAULT 0,
+  `rightcount` int(11) DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `matches` int(11) NOT NULL,
   `leftview` int(11) NOT NULL,
   `rightview` int(11) NOT NULL,
@@ -1218,13 +1224,13 @@ CREATE TABLE `tree` (
 --
 
 INSERT INTO `tree` (`id`, `userident`, `Names`, `left`, `right`, `leftcount`, `rightcount`, `created_at`, `updated_at`, `matches`, `leftview`, `rightview`, `matchedview`) VALUES
-(313, 1001, 'kalisa', '674891', '431635', 0, 0, '2019-11-30 19:58:43', '2019-12-01 10:32:14', 6, 1, 1, 6),
+(313, 1001, 'kalisa', '674891', '431635', 0, 0, '2019-11-30 19:58:43', '2019-12-01 13:49:19', 6, 8, 9, 6),
 (326, 674891, 'chance', '113087', '752021', 4, 3, '2019-12-01 09:39:14', '2019-12-01 10:08:42', 3, 0, 0, 0),
-(327, 431635, 'chance', '955385', '665355', 3, 4, '2019-12-01 09:40:56', '2019-12-01 10:32:13', 6, 0, 0, 0),
+(327, 431635, 'chance', '955385', '665355', 3, 5, '2019-12-01 09:40:56', '2019-12-01 13:49:19', 3, 0, 0, 0),
 (328, 113087, 'chance', '956905', '850591', 2, 1, '2019-12-01 09:44:25', '2019-12-01 10:08:41', 1, 0, 0, 0),
 (329, 752021, 'Telesphore Tuganimana', '170495', '531515', 1, 1, '2019-12-01 09:45:33', '2019-12-01 09:52:58', 1, 0, 0, 0),
 (330, 955385, 'chance', '791862', '497207', 1, 1, '2019-12-01 09:46:57', '2019-12-01 09:59:27', 1, 0, 0, 0),
-(331, 665355, 'Telesphore Tuganimana', '522941', '697439', 1, 2, '2019-12-01 09:49:08', '2019-12-01 10:32:12', 2, 0, 0, 0),
+(331, 665355, 'Telesphore Tuganimana', '522941', '697439', 1, 3, '2019-12-01 09:49:08', '2019-12-01 13:49:18', 1, 0, 0, 0),
 (332, 531515, 'kalisa', '', '', 0, 0, '2019-12-01 09:51:13', '2019-12-01 09:51:13', 0, 0, 0, 0),
 (333, 170495, 'chance', '', '', 0, 0, '2019-12-01 09:52:56', '2019-12-01 09:52:56', 0, 0, 0, 0),
 (334, 956905, 'kwizera', '101472', '', 1, 0, '2019-12-01 09:54:42', '2019-12-01 10:08:41', 0, 0, 0, 0),
@@ -1232,9 +1238,9 @@ INSERT INTO `tree` (`id`, `userident`, `Names`, `left`, `right`, `leftcount`, `r
 (336, 497207, 'kwizera', '', '', 0, 0, '2019-12-01 09:58:47', '2019-12-01 09:58:47', 0, 0, 0, 0),
 (337, 791862, 'kwizera', '', '', 0, 0, '2019-12-01 09:59:25', '2019-12-01 09:59:25', 0, 0, 0, 0),
 (338, 522941, 'chance', '', '', 0, 0, '2019-12-01 10:04:42', '2019-12-01 10:04:42', 0, 0, 0, 0),
-(339, 697439, 'kabera', '128712', '', 1, 0, '2019-12-01 10:05:49', '2019-12-01 10:32:11', 0, 0, 0, 0),
+(339, 697439, 'kabera', '128712', '', 2, 0, '2019-12-01 10:05:49', '2019-12-01 13:49:18', 0, 0, 0, 0),
 (340, 101472, 'Telesphore Tuganimana', '', '', 0, 0, '2019-12-01 10:08:39', '2019-12-01 10:08:39', 0, 0, 0, 0),
-(341, 128712, 'chance', '', '', 0, 0, '2019-12-01 10:32:08', '2019-12-01 10:32:08', 0, 0, 0, 0);
+(341, 128712, 'chance', '', '772355', 0, 1, '2019-12-01 10:32:08', '2019-12-01 13:49:18', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1254,8 +1260,8 @@ CREATE TABLE `user` (
   `side` enum('left','right') NOT NULL,
   `user_status` varchar(100) NOT NULL,
   `picture` varchar(200) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1263,7 +1269,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `userident`, `Names`, `NationalID`, `password`, `mobile`, `address`, `under_userpin`, `side`, `user_status`, `picture`, `created_at`, `updated_at`) VALUES
-(1, 1001, 'Kwizera Jean De Dieu', 1199180155889249, '123', '0788974412', 'Nyarugenge', '', '', 'Active', 'images.png', '2019-11-17 21:22:14', '2019-11-17 21:22:14'),
+(1, 1001, 'Kalisa', 1199180155889249, '123', '0788974412', 'Nyarugenge', '', '', 'Active', 'images.png', '2019-11-17 21:22:14', '2019-11-17 21:22:14'),
 (2, 714629, 'NDATIMANA Erneste', 11991801558892549, '123', '8888998', 'Nyarugenge-Gitega', '1001', 'left', 'Active', 'images.png', '2019-11-17 21:22:14', '2019-11-17 21:22:14'),
 (3, 308897, 'Cyriack Ndayambaje', 112124567, '123', '788436332', 'Nyarugenge-Gitega', '1001', 'right', 'Active', 'images.png', '2019-11-17 21:22:14', '2019-11-17 21:22:14'),
 (4, 738562, 'NDAYISENGA JEAN PIERRE', 1198880196386094, '123456', '0787250198', 'Nyarugenge-Gitega', '308897', 'right', 'Active', 'images.png', '2019-11-17 21:22:14', '2019-11-17 21:22:14'),
@@ -1598,7 +1604,8 @@ INSERT INTO `user` (`id`, `userident`, `Names`, `NationalID`, `password`, `mobil
 (336, 522941, 'chance', 23345, '123', '784981685', 'Kigali, farerw', '665355', 'left', 'Active', 'images.png', '2019-12-01 10:04:39', '2019-12-01 10:04:39'),
 (337, 697439, 'kabera', 122256666, '123', '784981685', 'Kigali, farerw', '665355', 'right', 'Active', 'images.png', '2019-12-01 10:05:47', '2019-12-01 10:05:47'),
 (338, 101472, 'Telesphore Tuganimana', 14544556656654, '123', '784981685', 'Kigali, farerw', '956905', 'left', 'Active', 'images.png', '2019-12-01 10:08:38', '2019-12-01 10:08:38'),
-(339, 128712, 'chance', 12345, '123', '345343', 'Kigali, farerw', '697439', 'left', 'Active', 'images.png', '2019-12-01 10:32:07', '2019-12-01 10:32:07');
+(339, 128712, 'chance', 12345, '123', '345343', 'Kigali, farerw', '697439', 'left', 'Active', 'images.png', '2019-12-01 10:32:07', '2019-12-01 10:32:07'),
+(340, 772355, 'Charles', 7654322234567, '123', '45687654', 'kigali', '128712', 'right', 'Active', 'images.png', '2019-12-01 13:49:18', '2019-12-01 13:49:18');
 
 --
 -- Indexes for dumped tables
@@ -1678,7 +1685,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `income`
 --
 ALTER TABLE `income`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=345;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
 
 --
 -- AUTO_INCREMENT for table `income_received`
@@ -1702,7 +1709,7 @@ ALTER TABLE `pin_request`
 -- AUTO_INCREMENT for table `todays`
 --
 ALTER TABLE `todays`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=283;
 
 --
 -- AUTO_INCREMENT for table `tree`
@@ -1714,7 +1721,7 @@ ALTER TABLE `tree`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=340;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=341;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

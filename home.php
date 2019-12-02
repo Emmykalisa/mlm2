@@ -67,14 +67,74 @@ $userident = $_SESSION['userident'];
                    
                     $totalAmount = $result['total_bal'] + $calculator->getTotalPoints();
                     ?>
-                     <div class="col-lg-3">
-                        <div class="panel panel-danger">
+                     
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h4 class="panel-title">Available Pin</h4>
+                                <h4 class="panel-title">Current Total Earnings</h4>
                             </div>
                             <div class="panel-body">
                                 <?php
-                                echo  mysqli_num_rows(mysqli_query($con, "select * from pin_list where userident='{$userident}' and status='open'"));
+                                $total_earnings=$result['total_earnings']+ $calculator->getTotalPoints();
+                                echo $total_earnings
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Encashed Balance</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $total_withraw=$result['total_payment'];
+                                echo $total_withraw
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Available Balance </h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $available_balance = $result['total_earnings']+ $calculator->getTotalPoints()-$result['total_payment'];
+                                echo $available_balance
+                                ?>
+                            </div>
+                        </div>
+                    </div
+                    ><div class="col-md-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Current Matching Balance</h4>
+                            </div>
+                            <div class="panel-body">
+                              <?php echo $calculator->getMatchBalance(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Indirect Balance</h4>
+                            </div>
+                            <div class="panel-body">
+                            <?php echo $calculator->indirectbalance(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">sponsor</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                echo $result['total_bal'];
                                 ?>
                             </div>
                         </div>
@@ -116,6 +176,18 @@ while($rows=mysqli_fetch_array($select)){
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Available Pin</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                echo  mysqli_num_rows(mysqli_query($con, "select * from pin_list where userident='{$userident}' and status='open'"));
+                                ?>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- <div class="col-md-3">
                         <div class="panel panel-primary">
@@ -127,54 +199,6 @@ while($rows=mysqli_fetch_array($select)){
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-lg-3">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Total earnings</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php
-                                $total_earnings=$result['total_earnings']+ $calculator->getTotalPoints();
-                                echo $total_earnings
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Available balance </h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php
-                                $available_balance = $result['total_bal']+ $calculator->getTotalPoints();
-                                echo $available_balance
-                                ?>
-                            </div>
-                        </div>
-                    </div
-                    ><div class="col-md-3">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Matching + Indirect Balance</h4>
-                            </div>
-                            <div class="panel-body">
-                              <?php echo $calculator->getTotalPoints(); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">sponsor</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php
-                                echo $result['total_bal'];
-                                ?>
-                            </div>
-                        </div>
-                    </div>
                    
                 </div>
             </div>

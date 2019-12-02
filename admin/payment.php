@@ -90,7 +90,7 @@
                                 <tbody>
 
                                     <?php
-                                        $result = $dbh->prepare('Select user.userident, user.Names, user.NationalID, user.mobile, income.total_bal FROM user, income where user.userident=income.userident and income.total_bal>0 Order By income.userident ASC');
+                                        $result = $dbh->prepare('Select user.userident, user.Names, user.NationalID, user.mobile, income.total_bal FROM user, income where user.userident=income.userident Order By income.userident ASC');
                                         $result->execute();
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                             $qHelper = new QueryHelper();
