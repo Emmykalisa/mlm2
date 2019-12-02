@@ -78,12 +78,12 @@ if (isset($_GET['userident'])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $query = mysqli_query($con, 'select * from income where current_bal>=100');
+                                    $query = mysqli_query($con, 'select * from income where available_balance>=100');
                                     if (mysqli_num_rows($query) > 0) {
                                         $i = 1;
                                         while ($row = mysqli_fetch_array($query)) {
                                             $userid = $row['userident'];
-                                            $amount = $row['current_bal'];
+                                            $amount = $row['available_balance'];
 
                                             $query_user = mysqli_query($con, "select * from user where userident='{$userid}'");
                                             $result = mysqli_fetch_array($query_user);

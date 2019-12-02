@@ -67,14 +67,13 @@ $userident = $_SESSION['userident'];
 $select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
 while($rows=mysqli_fetch_array($select)){
      $matchi=$rows['matchedview'];
+     $matchesu = $rows['matches'];
 
-     
+     $match2=$matchi+$matchesu;
    
 }
-            $matchu = $this->matchUsers();
-            $match=$matchu+$matchi;
 
-            return intdiv($match, 5);
+            return intdiv($match2, 5);
         }
 
          public function Flashout()
@@ -95,6 +94,13 @@ while($rows=mysqli_fetch_array($select)){
 
             return $points;
         }
+        public function indirectbalance()
+        {
+            $ind = $this->getIndirectProfit() * INDIRECT_BONUS;
+
+            return $ind;
+        }
+        
 
 
         public function getTotalPoints()
@@ -119,6 +125,27 @@ while($rows=mysqli_fetch_array($select)){
 
             return $match+ $indirect - $profit;
         }
+
+        public function getMatchBalance()
+        {
+
+            include"connect.php";
+            $userident = $_SESSION['userident'];
+            $select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
+            while($rows=mysqli_fetch_array($select)){
+                $matchu=$rows['matches'];
+                $matchi=$rows['matchedview'];
+
+                $matcho=$matchu+$matchi;
+            
+            }
+                               
+            $match = $matcho * QUANTITY_BONUS;
+            $profit = $this->getGiftCheck() * QUANTITY_BONUS;
+
+            return $match - $profit;
+        }
+
 
         public function indirectMarks($marks)
         {

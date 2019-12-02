@@ -91,8 +91,10 @@
                                 </thead>
                                 <tbody>
 
-                                    <?php
+                                    <?php 
+
                                         $result = $dbh->prepare("Select * FROM withdraw where status='no' order by id  ASC");
+
                                         $result->execute();
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                            

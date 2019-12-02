@@ -67,70 +67,11 @@ $userident = $_SESSION['userident'];
                    
                     $totalAmount = $result['total_bal'] + $calculator->getTotalPoints();
                     ?>
-                     <div class="col-lg-3">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Available Pin</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php
-                                echo  mysqli_num_rows(mysqli_query($con, "select * from pin_list where userident='{$userident}' and status='open'"));
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Matching point</h4>
-                            </div>
-                            <div class="panel-body">
-                                  <?php 
-$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
-while($rows=mysqli_fetch_array($select)){
-    $matches=$rows['matches']+$rows['matchedview'];
-    echo $matches;
-}
-
-                                 ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Indirect point</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php echo $calculator->getIndirectProfit(); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Gift check</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php echo $calculator->getGiftCheck(); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- <div class="col-md-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Flash out</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php echo $calculator->Flashout(); ?>
-                            </div>
-                        </div>
-                    </div> -->
+                     
                     <div class="col-lg-3">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h4 class="panel-title">Total earnings</h4>
+                                <h4 class="panel-title">Current Total Earnings</h4>
                             </div>
                             <div class="panel-body">
                                 <?php
@@ -141,11 +82,71 @@ while($rows=mysqli_fetch_array($select)){
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="panel panel-warning">
+                        <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h4 class="panel-title">Available balance </h4>
+                                <h4 class="panel-title">Encashed Balance</h4>
                             </div>
                             <div class="panel-body">
+                                <?php
+                                $total_withraw=$result['total_payment'];
+                                echo $total_withraw
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Available Balance </h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $available_balance = $result['total_earnings']+ $calculator->getTotalPoints()-$result['total_payment'];
+                                echo $available_balance
+                                ?>
+                            </div>
+                        </div>
+                    </div
+                    ><div class="col-md-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Current Matching Balance</h4>
+                            </div>
+                            <div class="panel-body">
+                              <?php echo $calculator->getMatchBalance(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Indirect Balance</h4>
+                            </div>
+                            <div class="panel-body">
+                            <?php echo $calculator->indirectbalance(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">sponsor</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                echo $result['total_bal'];
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Matching point</h4>
+                            </div>
+                            <div class="panel-body">
+
                                 <?php
                                 $s=$dbi->query("SELECT SUM(amount) FROM withdraw where userident='$userident' and status='yes' ");
                         while($rows=mysqli_fetch_array($s)){
@@ -181,25 +182,46 @@ while($rows=mysqli_fetch_array($select)){
                     <div class="col-md-3">
                         <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h4 class="panel-title">Matching + Indirect Balance</h4>
+                                <h4 class="panel-title">Indirect point</h4>
                             </div>
                             <div class="panel-body">
-                              <?php echo $calculator->getTotalPoints(); ?>
+                                <?php echo $calculator->getIndirectProfit(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Gift check</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php echo $calculator->getGiftCheck(); ?>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="panel panel-success">
+                        <div class="panel panel-danger">
                             <div class="panel-heading">
-                                <h4 class="panel-title">sponsor</h4>
+                                <h4 class="panel-title">Available Pin</h4>
                             </div>
                             <div class="panel-body">
                                 <?php
-                                echo $result['total_bal'];
+                                echo  mysqli_num_rows(mysqli_query($con, "select * from pin_list where userident='{$userident}' and status='open'"));
                                 ?>
                             </div>
                         </div>
                     </div>
+
+                    <!-- <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Flash out</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php echo $calculator->Flashout(); ?>
+                            </div>
+                        </div>
+                    </div> -->
                    
                 </div>
             </div>

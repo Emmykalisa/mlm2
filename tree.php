@@ -71,53 +71,7 @@ if (isset($_GET['search-id'])) {
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
-                <div class="row">
-                    <!-- <div class="col-md-12">
-                        <h2 class="text-center">
-                            The tree points structure
-                        </h2>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Matching point</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php echo $calculator->matchUsers(); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Indirect point</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php echo $calculator->getIndirectProfit(); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Gift check</h4>
-                            </div>
-                            <div class="panel-body">
-                                <?php echo $calculator->getGiftCheck(); ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Aggregated point</h4>
-                            </div>
-                            <div class="panel-body">
-                              <?php echo $calculator->getTotalPoints(); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+               
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="table-responsive">
@@ -239,6 +193,49 @@ if ('' != $thidr_right_user) {
                                 </tr>
                             </table>
                         </div>
+
+                    <!-- <div class="col-lg-12">
+                    	<div class="table-responsive">
+                        	<table class="table table-bordered table-striped">
+                            	<tr>
+                                	<th>#</th>
+                                    <th>Names</th>
+                                    <th>Left</th>
+                                    <th>Right</th>
+                                    <!-- <th>Pin</th> -->
+                                </tr>
+                                <?php
+									// $i=1;
+									// $query = mysqli_query($con,"select user.Names, user.under_userpin, tree.leftcount, tree.rightcount FROM user, tree where user.under_userpin=tree.left||tree.right");
+									// if(mysqli_num_rows($query)>0){
+									// 	while($row=mysqli_fetch_array($query)){
+                                    //         $name = $row['Names'];
+                                    //         $left = $row['leftcount']+$row['leftview'];
+                                    //         $right = $row['rightcount']+$row['rightview'];
+                                    //         // $pin = $row['pin'];
+									// 	?>
+                                    <!-- //     	<tr>
+                                    //         	<td><?php echo $i ?></td>
+                                    //             <td><?php echo $name ?></td>
+                                    //             <td><?php echo $left ?></td>
+                                    //             <td><?php echo $right ?></td>
+                                    //             <!-- <td><?php echo $pin ?></td> -->
+                                    <!-- //         </tr>
+                                    //     <?php  
+									// 		$i++;
+									// 	}
+									// }
+									// else{
+									// ?>
+                                    <!-- // 	<tr>
+                                    //     	<td colspan="4">Sorry you have no member.</td>
+                                    //     </tr>
+                                    // <?php 
+									// }
+								?>
+                            </table>
+                        </div>
+                    </div> -->
                     </div>
                 </div>
             </div>
