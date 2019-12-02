@@ -139,25 +139,48 @@ $userident = $_SESSION['userident'];
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-3">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Matching point</h4>
                             </div>
                             <div class="panel-body">
-                                  <?php 
-$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
-while($rows=mysqli_fetch_array($select)){
-    $matches=$rows['matches']+$rows['matchedview'];
-    echo $matches;
-}
 
-                                 ?>
+                                <?php
+                                $s=$dbi->query("SELECT SUM(amount) FROM withdraw where userident='$userident' and status='yes' ");
+                        while($rows=mysqli_fetch_array($s)){
+                            $withd=$rows['SUM(amount)'];
+                        }
+                                $available_balance = $result['total_bal']+ $calculator->getTotalPoints()-$withd;
+                                echo $available_balance;
+                                ?>
                             </div>
                         </div>
-                    </div>
+                    </div
+                    >
+ <div class="col-lg-3">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> Amount Withdrawn </h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $s=$dbi->query("SELECT SUM(amount) FROM withdraw where userident='$userident' and status='yes' ");
+                        while($rows=mysqli_fetch_array($s)){
+                            $withd=$rows['SUM(amount)'];
+                        }
+                               
+                                echo $withd;
+                                ?>
+                            </div>
+                        </div>
+                    </div
+                    >
+
+
                     <div class="col-md-3">
-                        <div class="panel panel-primary">
+                        <div class="panel panel-success">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Indirect point</h4>
                             </div>
