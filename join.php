@@ -197,7 +197,7 @@ $lefthand = $todayleft-$todaymatch;
  $diff=$todaymatch+$fmatchu-$previousmatch;
  if($diff>6){
     //===Now Let update our points - as flash out took place
-$matches=$previousmatch+6;
+$matches=$todaymatch+$fmatchu+6;
 $totright =$todayright+ $rview;
 $totleft =$todayleft+ $lview;
 $updatee=$dbi->query("UPDATE tree SET matches='$matches',matchedview='$matches',leftview='$totleft',rightview='$totright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
