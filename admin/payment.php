@@ -81,31 +81,32 @@
                                     <tr>
                                         <th>Pin</th>
                                         <th>Names</th>
-                                        <th>No ID</th>
+                                        <th>Transactionid</th>
                                         <th>Telephone</th>
-                                        <th>Total Amount</th>
+                                        <th>Amount</th>
+                                        <th>Amount After tax</th>
+                                        <th>Requested at</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     <?php
-                                        $result = $dbh->prepare('Select user.userident, user.Names, user.NationalID, user.mobile, income.total_bal FROM user, income where user.userident=income.userident and income.total_bal>0 Order By income.userident ASC');
+                                        $result = $dbh->prepare("Select * FROM withdraw where status='no' order by id  ASC");
                                         $result->execute();
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                                            $qHelper = new QueryHelper();
-                                            $userTree = $qHelper->getUserCounts($row['userident']);
-                                            $leftSideCount = $userTree['leftcount'];
-                                            $rightSideCount = $userTree['rightcount'];
-                                            $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
-                                            $totalAmount = $row['total_bal'] + $calculator->getTotalPoints();
+                                           
                                             echo '<tr>';
                                             echo '<td>'.$row['userident'].'</td>';
-                                            echo '<td>'.$row['Names'].'</td>';
-                                            echo '<td>'.$row['NationalID'].'</td>';
-                                            echo '<td>'.$row['mobile'].'</td>';
-                                            echo '<td>'.$totalAmount.'</td>';
-                                            echo "<td><a href='payment_form.php?payment_id={$row['userident']}' class='btn btn-danger'>Make Payment</a></td>";
+                                            echo '<td>'.$row['fullname'].'</td>';
+                                            echo '<td>'.$row['transactionid'].'</td>';
+                                            echo '<td>'.$row['telephone'].'</td>';
+                                            echo '<td>'.$row['amount'].'</td>';
+
+                                            echo '<td>'.$row['receivedamount'].'</td>';
+                                             echo '<td>'.$row['created_at'].'</td>';
+                                            
+                                            echo "<td><a href='payment_form.php?id={$row['id']}' class='btn btn-danger'>Make Payment</a></td>";
                                             echo '</tr>';
                                         }
                                     ?>

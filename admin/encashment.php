@@ -58,14 +58,10 @@
         <?php include 'php-includes/menu.php'; ?>
 
         <!-- Page Content -->
-        
         <div id="page-wrapper">
-        <button onclick="printDiv();">Print it</button>
-        <div id="print">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">daily encashment report</h1>
-                    <!-- <input type="button" onclick="printDiv('page-wrapper')" value="print a div!"/> -->
+                    <h1 class="page-header">Payment of user</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -74,51 +70,48 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <!-- <a href='adduser.php' class='btn btn-primary' style="float: right;">ADD USER</a><br><br> -->
-                        <!-- <div class="panel-heading">
+                        <div class="panel-heading">
                             <b>Users Accounts</b>
-                        </div> -->
+                        </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            
                             <table width="100%" class="table table-striped table-bordered table-hover"
                                 id="dataTables-example">
-                                  <thead>
+                                <thead>
                                     <tr>
                                         <th>Pin</th>
                                         <th>Names</th>
-                                        <th>Transactionid</th>
+                                        <th>No ID</th>
                                         <th>Telephone</th>
-                                        <th>Amount</th>
-                                        <th>Amount After tax</th>
-                                        <th>Requested at</th>
+                                        <th>Total Amount</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     <?php
-                                        $result = $dbh->prepare("Select * FROM withdraw where status='yes' order by id  ASC");
+                                        $result = $dbh->prepare('Select user.userident, user.Names, user.NationalID, user.mobile, income.total_bal FROM user, income where user.userident=income.userident and income.total_bal>0 Order By income.userident ASC');
                                         $result->execute();
                                         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                                           
+                                            $qHelper = new QueryHelper();
+                                            $userTree = $qHelper->getUserCounts($row['userident']);
+                                            $leftSideCount = $userTree['leftcount'];
+                                            $rightSideCount = $userTree['rightcount'];
+                                            $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
+                                            $totalAmount = $row['total_bal'] + $calculator->getTotalPoints();
                                             echo '<tr>';
                                             echo '<td>'.$row['userident'].'</td>';
-                                            echo '<td>'.$row['fullname'].'</td>';
-                                            echo '<td>'.$row['transactionid'].'</td>';
-                                            echo '<td>'.$row['telephone'].'</td>';
-                                            echo '<td>'.$row['amount'].'</td>';
-
-                                            echo '<td>'.$row['receivedamount'].'</td>';
-                                             echo '<td>'.$row['created_at'].'</td>';
-                                            
-                                            echo "<td><p class='btn btn-success'>".$row['status']."</p></td>";
+                                            echo '<td>'.$row['Names'].'</td>';
+                                            echo '<td>'.$row['NationalID'].'</td>';
+                                            echo '<td>'.$row['mobile'].'</td>';
+                                            echo '<td>'.$totalAmount.'</td>';
+                                            echo "<td><a href='payment_form.php?payment_id={$row['userident']}' class='btn btn-danger'>Make Payment</a></td>";
                                             echo '</tr>';
                                         }
                                     ?>
 
                                 </tbody>
                             </table>
-                         </div>
 
                         </div>
                         <!-- /.panel -->
@@ -157,35 +150,12 @@
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
-        // $(document).ready(function() {
-        //     $('#dataTables-example').DataTable({
-        //         responsive: true
-        //     });
-        // });
-        function printDiv(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
-        w=window.open();
-        w.document.write(printContents);
-        w.print();
-        w.close();
-        }
-        function printDiv() {
-    var divToPrint = document.getElementById('print');
-    var htmlToPrint = '' +
-        '<style type="text/css">' +
-        'table th, table td {' +
-        'border:1px solid #000;' +
-        'padding:0.5em;' +
-        '}' +
-        '</style>';
-    htmlToPrint += divToPrint.outerHTML;
-    newWin = window.open("");
-    newWin.document.write(htmlToPrint);
-    newWin.print();
-    newWin.close();
-}
-        
-         </script>
+        $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        });
+        </script>
 
 </body>
 

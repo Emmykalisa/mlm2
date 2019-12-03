@@ -1,12 +1,27 @@
 <?php
 include 'php-includes/connect.php';
 include 'php-includes/check-login.php';
+include './php-includes/treeUtil.php';
+include './php-includes/queryHelper.php';
 $userident = $_SESSION['userident'];
 $capping = 5000;
 $capping2 = 6000;
 ?>
 <?php
 //User cliced on join
+  // ====================Taliki za none ================
+   $dat = new DateTime('now', new DateTimeZone('Africa/Cairo'));
+
+    $date = $dat->format('Y-m-d');
+
+    //======== Taliki zibanje 
+
+$dati = new DateTime('now', new DateTimeZone('Africa/Cairo'));
+$dati->modify("-1 day");
+    $datu = $dati->format('Y-m-d');
+
+
+
 if (isset($_GET['join_user'])) {
     $matching = 0;
     $side = '';
@@ -20,11 +35,26 @@ if (isset($_GET['join_user'])) {
     $sponsor = mysqli_real_escape_string($con, $_GET['sponsor']);
     $password = mysqli_real_escape_string($con, $_GET['pass1']);
     // $password = md5($password);
-    $date = date('y-m-d');
+    
+     $dat = new DateTime('now', new DateTimeZone('Africa/Cairo'));
+
+    $date = $dat->format('Y-m-d');
     $user_status = 'Active';
     $picture = 'images.png';
 
     $flag = 0;
+
+    //==========================Counting users who joined per day 
+
+    $newuser = $dbi->query("SELECT COUNT(id) from user where under_userpin='$under_userpin' AND created_at='$date'  ");
+    while($rows=mysqli_fetch_array($newuser)){
+       $countn=$rows['COUNT(id)'];
+    }
+    if($countn<=5){
+        // put something here;
+    }else{
+        //echo"Flash out take a place";
+    }
 
     if ('' != $pin && '' != $mobile && '' != $address && '' != $under_userpin && '' != $side) {
         //User filled all the fields.
@@ -100,6 +130,87 @@ if (isset($_GET['join_user'])) {
             // $temp_under_userpin;
             // $temp_side_count;
             mysqli_query($con, "update tree set `{$temp_side_count}`={$current_temp_side_count},`updated_at`=NOW() where userident='{$temp_under_userpin}'");
+///=============helpers==================================
+        //========= Flash out process Zitangirira hano(TT) !=====
+
+             $query = mysqli_query($con, "select * from income where userident='{$temp_under_userpin}'");
+                    $result = mysqli_fetch_array($query);
+
+                    $qHelper = new QueryHelper();
+                    $userTree = $qHelper->getUserCounts($result['userident']);
+                    $leftSideCount = $userTree['leftcount'];
+                    $rightSideCount = $userTree['rightcount'];
+                    $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
+
+//==============Update points 
+
+                    // $update=$dbi->query("UPDATE tree set leftpoints='$leftSideCount', rightpoints='$rightSideCount' where userident='{$temp_under_userpin}' ");
+
+ //============Insertind tree to todays table to easly notify entry date (TT)
+            $tree_data = tree($temp_under_userpin);
+
+                $temp_left_count = $tree_data['leftcount'];
+                $temp_right_count = $tree_data['rightcount'];
+                $matched=$calculator->matchUsers();
+//select matchedview to this 
+ $usertri=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
+ while($rows=mysqli_fetch_array($usertri)){
+   
+    $matchi=$rows['matchedview'];
+ }               
+
+$fmatch=$matched+$matchi;
+
+$newentry = $dbi->query("INSERT INTO todays(userpin,matched,created_at,leftcount,rightcount,flashoutmatch) VALUES('$temp_under_userpin','$matched','$date','$temp_left_count','$temp_right_count','$fmatch')");
+
+//===============Update tree - points--- (TT)=======================
+ // $updta=$dbi->query("UPDATE tree SET leftpoints='$temp_left_count', rightpoints='$temp_right_count' where   userident='{$temp_under_userpin}' ");
+
+//=============== left na light ziherukatc (TT)
+ $iziheruka =  $dbi->query("SELECT * FROM todays where userpin='{$temp_under_userpin}' AND created_at='$datu' order by id desc limit 1 ");
+ while($rows=mysqli_fetch_array($iziheruka)){
+    $previousmatch = $rows['matched'];
+   
+ }
+ //=============== left na light zuyumunsi (TT)
+ $nowpo = $dbi->query("SELECT * FROM todays where userpin='{$temp_under_userpin}' AND created_at='$date' order by id desc limit 1 ");
+ while($rows=mysqli_fetch_array($nowpo)){
+    $todaymatch = $rows['matched'];
+
+    
+
+ }
+//===============Selecting points 
+ $usertrees=$dbi->query("SELECT * FROM tree where userident='{$temp_under_userpin}' order by id desc limit 1");
+ while($rows=mysqli_fetch_array($usertrees)){
+    $todayright=$rows['rightcount'];
+    $todayleft=$rows['leftcount'];
+    $rview=$rows['rightview'];
+    $lview=$rows['leftview'];
+    $matchu=$rows['matches'];
+    $fmatchu=$rows['matchedview'];
+ }
+$righthand = $todayright-$todaymatch;
+$lefthand = $todayleft-$todaymatch;
+
+
+ $diff=$todaymatch+$fmatchu-$previousmatch;
+ if($diff>6){
+    //===Now Let update our points - as flash out took place
+$matches=$todaymatch+$fmatchu+6;
+$totright =$todayright+ $rview;
+$totleft =$todayleft+ $lview;
+$updatee=$dbi->query("UPDATE tree SET matches='$matches',matchedview='$matches',leftview='$totleft',rightview='$totright', rightcount=0,leftcount=0  where userident='{$temp_under_userpin}' ");
+
+
+ }else{
+     
+$matches=$todaymatch;
+$updatee=$dbi->query("UPDATE tree SET matches='$matches' where userident='{$temp_under_userpin}' ");
+
+ }
+
+//==================END OF FLASH OUT (TT)=======================
 
             //income
             if ('' != $temp_sponsor) {
@@ -155,7 +266,6 @@ if (isset($_GET['join_user'])) {
     }
 }
 ?>
-<!--/join user-->
 <?php
 //functions
 function pin_check($pin)

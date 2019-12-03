@@ -1,6 +1,8 @@
 <?php
+
 include 'php-includes/check-login.php';
 include 'php-includes/connect.php';
+
 include './php-includes/treeUtil.php';
 include './php-includes/queryHelper.php';
 $userident = $_SESSION['userident'];
@@ -61,6 +63,8 @@ $userident = $_SESSION['userident'];
                     $leftSideCount = $userTree['leftcount'];
                     $rightSideCount = $userTree['rightcount'];
                     $calculator = new AmountCalculator($leftSideCount, $rightSideCount);
+
+                   
                     $totalAmount = $result['total_bal'] + $calculator->getTotalPoints();
                     ?>
                      <div class="col-lg-3">
@@ -81,7 +85,14 @@ $userident = $_SESSION['userident'];
                                 <h4 class="panel-title">Matching point</h4>
                             </div>
                             <div class="panel-body">
-                                <?php echo $calculator->matchUsers(); ?>
+                                  <?php 
+$select = $dbi->query("SELECT * FROM tree where userident='{$userident}' order by id desc limit 1");
+while($rows=mysqli_fetch_array($select)){
+    $matches=$rows['matches']+$rows['matchedview'];
+    echo $matches;
+}
+
+                                 ?>
                             </div>
                         </div>
                     </div>
@@ -105,6 +116,17 @@ $userident = $_SESSION['userident'];
                             </div>
                         </div>
                     </div>
+
+                    <!-- <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Flash out</h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php echo $calculator->Flashout(); ?>
+                            </div>
+                        </div>
+                    </div> -->
                     <div class="col-lg-3">
                         <div class="panel panel-success">
                             <div class="panel-heading">
@@ -119,19 +141,44 @@ $userident = $_SESSION['userident'];
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="panel panel-success">
+                        <div class="panel panel-warning">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Available balance </h4>
                             </div>
                             <div class="panel-body">
                                 <?php
-                                $available_balance = $result['total_bal']+ $calculator->getTotalPoints();
-                                echo $available_balance
+                                $s=$dbi->query("SELECT SUM(amount) FROM withdraw where userident='$userident' and status='yes' ");
+                        while($rows=mysqli_fetch_array($s)){
+                            $withd=$rows['SUM(amount)'];
+                        }
+                                $available_balance = $result['total_bal']+ $calculator->getTotalPoints()-$withd;
+                                echo $available_balance;
                                 ?>
                             </div>
                         </div>
                     </div
-                    ><div class="col-md-3">
+                    >
+ <div class="col-lg-3">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> Amount Withdrawn </h4>
+                            </div>
+                            <div class="panel-body">
+                                <?php
+                                $s=$dbi->query("SELECT SUM(amount) FROM withdraw where userident='$userident' and status='yes' ");
+                        while($rows=mysqli_fetch_array($s)){
+                            $withd=$rows['SUM(amount)'];
+                        }
+                               
+                                echo $withd;
+                                ?>
+                            </div>
+                        </div>
+                    </div
+                    >
+
+
+                    <div class="col-md-3">
                         <div class="panel panel-success">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Matching + Indirect Balance</h4>

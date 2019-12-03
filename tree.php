@@ -18,8 +18,8 @@ function tree_data($userident)
     $result = mysqli_fetch_array($query);
     $data['left'] = $result['left'];
     $data['right'] = $result['right'];
-    $data['leftcount'] = $result['leftcount'];
-    $data['rightcount'] = $result['rightcount'];
+    $data['leftcount'] = $result['leftcount']+$result['leftview'];
+    $data['rightcount'] = $result['rightcount']+$result['rightview'];
 
     return $data;
 }
@@ -126,11 +126,11 @@ if (isset($_GET['search-id'])) {
                                     <?php
 $data = tree_data($search);
 ?>
-                                    <td><?php echo $data['leftcount']; ?></td>
+                                    <td><span class="badge badge-primary"><?php echo $data['leftcount']; ?></td>
                                     <td colspan="2"><i class="fa fa-user fa-4x" style="color:#1430B1"></i>
                                         <p><?php echo $search; ?></p>
                                     </td>
-                                    <td><?php echo $data['rightcount']; ?></td>
+                                    <td><span class="badge badge-primary"><?php echo $data['rightcount']; ?></span></td>
                                 </tr>
                                 <tr height="150">
                                     <?php
