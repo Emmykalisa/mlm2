@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 02, 2019 at 04:53 PM
+-- Generation Time: Dec 03, 2019 at 06:53 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.4
 
@@ -1683,7 +1683,8 @@ INSERT INTO `withdraw` (`id`, `userident`, `amount`, `telephone`, `created_at`, 
 (9, '1001', '20000', '250784981685', '2019-12-01', 'yes', '237076', 'Kwizera Jean De Dieu', '15400'),
 (10, '1001', '20000', '250784981685', '2019-12-01', 'no', '670780', 'Kwizera Jean De Dieu', '15400'),
 (11, '1001', '9270', '250784981685', '2019-12-01', 'no', '138310', 'Kwizera Jean De Dieu', '6601.4'),
-(12, '1001', '9270', '250784981685', '2019-12-02', 'no', '919012', 'Kwizera Jean De Dieu', '6601.4');
+(12, '1001', '9270', '250784981685', '2019-12-02', 'no', '919012', 'Kwizera Jean De Dieu', '6601.4'),
+(13, '1001', '9270', '250784981685', '2019-12-03', 'yes', '960952', 'Kwizera Jean De Dieu', '6601.4');
 
 --
 -- Indexes for dumped tables
@@ -1823,7 +1824,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `withdraw`
 --
 ALTER TABLE `withdraw`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
